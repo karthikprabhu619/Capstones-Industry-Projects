@@ -1,0 +1,42 @@
+relationship AutoDetected_b52d1409-fcb3-46b7-abad-1ca7851ecec3
+	crossFilteringBehavior: bothDirections
+	fromCardinality: one
+	fromColumn: 'Dim Employee'.'Emp ID'
+	toColumn: 'HR Analytics'.'Emp ID'
+
+relationship AutoDetected_448325f4-8fba-4357-92a7-1029bcac7802
+	crossFilteringBehavior: bothDirections
+	fromCardinality: one
+	fromColumn: 'Dim Travel'.'Emp ID'
+	toColumn: 'HR Analytics'.'Emp ID'
+
+relationship AutoDetected_0e4fa766-c0e3-4ec6-9afd-8e2688eaba5c
+	crossFilteringBehavior: bothDirections
+	fromCardinality: one
+	fromColumn: 'Dim Satisfaction'.'Emp ID'
+	toColumn: 'HR Analytics'.'Emp ID'
+
+relationship AutoDetected_03596822-b19e-40ae-b89f-e074b5f759f6
+	crossFilteringBehavior: bothDirections
+	fromCardinality: one
+	fromColumn: 'Dim Work rate'.'Emp ID'
+	toColumn: 'HR Analytics'.'Emp ID'
+
+relationship AutoDetected_aa17ab02-1d0a-421d-bc78-e88c0425cf3d
+	crossFilteringBehavior: bothDirections
+	fromCardinality: one
+	fromColumn: 'Dim Qualification'.'Emp ID'
+	toColumn: 'HR Analytics'.'Emp ID'
+
+relationship AutoDetected_a5926c47-ed82-4dcf-b0ff-005d1f44d1a4
+	crossFilteringBehavior: bothDirections
+	fromCardinality: one
+	fromColumn: 'Dim Job'.'Emp ID'
+	toColumn: 'HR Analytics'.'Emp ID'
+
+relationship AutoDetected_65dc2ab4-2001-4bd3-977b-4d0bdf8ef88a
+	crossFilteringBehavior: bothDirections
+	fromCardinality: one
+	fromColumn: 'Dim Salary'.'Emp ID'
+	toColumn: 'HR Analytics'.'Emp ID'
+

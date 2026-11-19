@@ -1,0 +1,33 @@
+table _Measure
+	lineageTag: c4c6d542-7620-4097-98ef-18d4ffdfec37
+
+	measure 'Active Emp' = CALCULATE(COUNT('HR Analytics'[Emp ID]),'Dim Satisfaction'[Attrition] = "No")
+		formatString: 0
+		lineageTag: 0ec4ade8-57cd-49ce-94a1-c7c2263c98ae
+
+	measure 'Inactive Emp' = ```
+			CALCULATE(COUNT('HR Analytics'[Emp ID]),'Dim Satisfaction'[Attrition] = "Yes") 
+			```
+		formatString: 0
+		lineageTag: 82ca4d0c-d89e-4194-832d-2f437c243ce5
+
+	measure 'Attrition rate' = DIVIDE(CALCULATE(COUNT('HR Analytics'[Emp ID]),'Dim Satisfaction'[Attrition] = "Yes"), COUNT('HR Analytics'[Emp ID]))
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 95ffeaeb-ee73-4f96-b716-606f91df9b66
+
+	measure 'High Risk Count' = CALCULATE(COUNT('HR Analytics'[Emp ID]),'Dim Work rate'[OverTime] = "Yes" ,'Dim Satisfaction'[JobSatisfaction] < 3, 'Dim Job'[YearsSinceLastPromotion] >=5)
+		formatString: 0
+		lineageTag: 33fb9a9e-f009-4935-a94e-8e45d78812ae
+
+	partition _Measure = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i44FAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Column1 = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Column1", type text}}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Changed Type",{"Column1"})
+				in
+				    #"Removed Columns"
+
+	annotation PBI_ResultType = Table
+

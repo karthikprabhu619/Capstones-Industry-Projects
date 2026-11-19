@@ -1,0 +1,28 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-IN
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_QueryOrder = ["_Measure","HR Analytics","Dim Employee","Dim Travel","Dim Satisfaction","Dim Work rate","Dim Qualification","Dim Job","Dim Salary"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table 'HR Analytics'
+ref table _Measure
+ref table 'Dim Employee'
+ref table 'Dim Travel'
+ref table 'Dim Satisfaction'
+ref table 'Dim Work rate'
+ref table 'Dim Qualification'
+ref table 'Dim Job'
+ref table 'Dim Salary'
+
+ref role 'UntitledResearch & Development'
+
+ref cultureInfo en-US
+

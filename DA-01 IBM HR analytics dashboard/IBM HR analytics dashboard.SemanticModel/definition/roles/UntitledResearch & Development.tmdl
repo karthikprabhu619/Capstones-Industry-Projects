@@ -1,0 +1,7 @@
+role 'UntitledResearch & Development'
+	modelPermission: read
+
+	tablePermission 'Dim Job' = [Department] == "Research & Development"
+
+	annotation PBI_Id = b5da3bab8b2f4e4983f854e2f5fa6ceb
+

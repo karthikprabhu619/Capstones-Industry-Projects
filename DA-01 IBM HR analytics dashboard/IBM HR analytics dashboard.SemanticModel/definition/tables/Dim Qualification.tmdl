@@ -1,0 +1,78 @@
+table 'Dim Qualification'
+	lineageTag: ffe2e43e-c0ea-4d3f-ad15-89dca2329a1e
+
+	column 'Emp ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: 7f64342e-6f4d-4aae-930c-3cdff9a98b9f
+		summarizeBy: none
+		sourceColumn: Emp ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Education
+		dataType: int64
+		formatString: 0
+		lineageTag: 9cdbdd80-72f0-4b68-8ea6-ab1326fa11ea
+		summarizeBy: sum
+		sourceColumn: Education
+
+		annotation SummarizationSetBy = Automatic
+
+	column EducationField
+		dataType: string
+		lineageTag: 0d46eec8-c545-44ab-bedd-d451340067f2
+		summarizeBy: none
+		sourceColumn: EducationField
+
+		annotation SummarizationSetBy = Automatic
+
+	column NumCompaniesWorked
+		dataType: int64
+		formatString: 0
+		lineageTag: 16afe74d-a6c9-4add-9d0f-b022a30f2478
+		summarizeBy: sum
+		sourceColumn: NumCompaniesWorked
+
+		annotation SummarizationSetBy = Automatic
+
+	column StockOptionLevel
+		dataType: int64
+		formatString: 0
+		lineageTag: 3d796951-4b3d-4260-9b2c-57f6e5ab37ac
+		summarizeBy: sum
+		sourceColumn: StockOptionLevel
+
+		annotation SummarizationSetBy = Automatic
+
+	column YearsAtCompany
+		dataType: int64
+		formatString: 0
+		lineageTag: 8abaaa99-218c-416f-aa4b-75c694386497
+		summarizeBy: none
+		sourceColumn: YearsAtCompany
+
+		annotation SummarizationSetBy = User
+
+	partition 'Dim Qualification' = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("D:\WA_Fn-UseC_-HR-Employee-Attrition.csv"),[Delimiter=",", Columns=35, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Age", Int64.Type}, {"Attrition", type text}, {"BusinessTravel", type text}, {"DailyRate", Int64.Type}, {"Department", type text}, {"DistanceFromHome", Int64.Type}, {"Education", Int64.Type}, {"EducationField", type text}, {"EmployeeCount", Int64.Type}, {"EmployeeNumber", Int64.Type}, {"EnvironmentSatisfaction", Int64.Type}, {"Gender", type text}, {"HourlyRate", Int64.Type}, {"JobInvolvement", Int64.Type}, {"JobLevel", Int64.Type}, {"JobRole", type text}, {"JobSatisfaction", Int64.Type}, {"MaritalStatus", type text}, {"MonthlyIncome", Int64.Type}, {"MonthlyRate", Int64.Type}, {"NumCompaniesWorked", Int64.Type}, {"Over18", type text}, {"OverTime", type text}, {"PercentSalaryHike", Int64.Type}, {"PerformanceRating", Int64.Type}, {"RelationshipSatisfaction", Int64.Type}, {"StandardHours", Int64.Type}, {"StockOptionLevel", Int64.Type}, {"TotalWorkingYears", Int64.Type}, {"TrainingTimesLastYear", Int64.Type}, {"WorkLifeBalance", Int64.Type}, {"YearsAtCompany", Int64.Type}, {"YearsInCurrentRole", Int64.Type}, {"YearsSinceLastPromotion", Int64.Type}, {"YearsWithCurrManager", Int64.Type}}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Changed Type",{{"EmployeeNumber", "Emp ID"}}),
+				    #"Reordered Columns" = Table.ReorderColumns(#"Renamed Columns",{"Emp ID", "Age", "Attrition", "BusinessTravel", "DailyRate", "Department", "DistanceFromHome", "Education", "EducationField", "EmployeeCount", "EnvironmentSatisfaction", "Gender", "HourlyRate", "JobInvolvement", "JobLevel", "JobRole", "JobSatisfaction", "MaritalStatus", "MonthlyIncome", "MonthlyRate", "NumCompaniesWorked", "Over18", "OverTime", "PercentSalaryHike", "PerformanceRating", "RelationshipSatisfaction", "StandardHours", "StockOptionLevel", "TotalWorkingYears", "TrainingTimesLastYear", "WorkLifeBalance", "YearsAtCompany", "YearsInCurrentRole", "YearsSinceLastPromotion", "YearsWithCurrManager"}),
+				    #"Added Conditional Column" = Table.AddColumn(#"Reordered Columns", "Age Group", each if [Age] <= 25 then "18-25" else if [Age] <= 35 then "26-35" else if [Age] <= 45 then "35-45" else "46-60"),
+				    #"Reordered Columns1" = Table.ReorderColumns(#"Added Conditional Column",{"Emp ID", "Age", "Age Group", "Attrition", "BusinessTravel", "DailyRate", "Department", "DistanceFromHome", "Education", "EducationField", "EmployeeCount", "EnvironmentSatisfaction", "Gender", "HourlyRate", "JobInvolvement", "JobLevel", "JobRole", "JobSatisfaction", "MaritalStatus", "MonthlyIncome", "MonthlyRate", "NumCompaniesWorked", "Over18", "OverTime", "PercentSalaryHike", "PerformanceRating", "RelationshipSatisfaction", "StandardHours", "StockOptionLevel", "TotalWorkingYears", "TrainingTimesLastYear", "WorkLifeBalance", "YearsAtCompany", "YearsInCurrentRole", "YearsSinceLastPromotion", "YearsWithCurrManager"}),
+				    #"Added Conditional Column1" = Table.AddColumn(#"Reordered Columns1", "Custom", each if [MonthlyIncome] <= 5000 then "1K - 5K" else if [MonthlyIncome] <= 10000 then "5k -10k" else if [MonthlyIncome] <= 15000 then "10k -15k" else "15k+"),
+				    #"Renamed Columns1" = Table.RenameColumns(#"Added Conditional Column1",{{"Custom", "Salary Slab"}}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Renamed Columns1",{"Age", "Attrition", "BusinessTravel", "DailyRate", "DistanceFromHome"}),
+				    #"Removed Other Columns" = Table.SelectColumns(#"Removed Columns",{"Emp ID", "Education", "EducationField", "NumCompaniesWorked", "StockOptionLevel", "YearsAtCompany"})
+				in
+				    #"Removed Other Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
